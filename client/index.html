@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSE Client</title>
+    <!-- Thêm đường dẫn đến các tệp CSS của Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1 class="text-center">Server-Sent Events (SSE) Client</h1>
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Last Update</th>
+                    <!-- Thêm các cột khác tùy thuộc vào cấu trúc dữ liệu trả về từ server -->
+                </tr>
+            </thead>
+            <tbody id="data-body">
+                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Thêm đường dẫn đến các tệp JavaScript của Bootstrap và thư viện jQuery (nếu cần) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const dataTable = document.getElementById('data-body');
+
+        const eventSource = new EventSource('http://localhost:3000/sse/sse');
+
+        eventSource.onmessage = function (event) {
+            console.log('EventSource message:', event);
+            const dataList = JSON.parse(event.data);
+            dataTable.innerHTML = ''; 
+            dataList.forEach(item => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${item.actorId}</td>
+                    <td>${item.firstName}</td>
+                    <td>${item.lastName}</td>
+                    <td>${item.lastUpdate}</td>
+                `;
+                dataTable.appendChild(newRow);
+            });
+        };
+
+        eventSource.onerror = function (error) {
+            console.error('EventSource error:', error);
+        };
+    </script>
+</body>
+</html>

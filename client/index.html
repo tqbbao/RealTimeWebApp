@@ -36,8 +36,7 @@
 
         eventSource.onmessage = function (event) {
             console.log('EventSource message:', event);
-            //const dataList = JSON.parse(event.data);
-            const dataList = event.data;
+            const dataList = JSON.parse(event.data);
             dataTable.innerHTML = ''; 
             dataList.forEach(item => {
                 const newRow = document.createElement('tr');

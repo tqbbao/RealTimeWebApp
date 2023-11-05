@@ -8,33 +8,6 @@ import { Actor } from 'src/entity/actor.entity';
 export class SseController {
   constructor(private readonly actorService: ActorService) {}
 
-  //   @Sse('sse')
-  //   sse(): Observable<MessageEvent> {
-  //     let count = 0;
-
-  //     return of(null).pipe(
-  //       switchMap(async () => {
-  //         count++;
-  //         const actors = await this.actorService.findAll();
-  //         const data = JSON.stringify(actors);
-  //         return new MessageEvent('message', { data });
-  //       }),
-  //       switchMap((initialData) => {
-  //         if (count === 1) {
-  //           return of(initialData);
-  //         } else {
-  //           return interval(5000).pipe(
-  //             switchMap(async () => {
-  //               const actors = await this.actorService.findAll();
-  //               const data = JSON.stringify(actors);
-  //               return new MessageEvent('message', { data });
-  //             }),
-  //           );
-  //         }
-  //       }),
-  //     );
-  //   }
-
   @Sse('sse')
   sse(): Observable<MessageEvent> {
     return interval(5000).pipe(
@@ -44,15 +17,10 @@ export class SseController {
       }),
     );
   }
-  //   @Sse('sse')
-  //   sse(): Observable<any> {
-  //     return interval(5000).pipe(
-  //       switchMap(async () => await this.actorService.findAll()),
-  //       map((p) => ({
-  //         data: {
-
-  //         },
-  //       })),
-  //     );
-  //   }
+}
+export interface MessageEvent {
+  data: string | object;
+  id?: string;
+  type?: string;
+  retry?: number;
 }
